@@ -156,7 +156,7 @@ LOGOUT_REDIRECT_URL = '/login/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Dirección del bróker MQTT
-MQTT_HOST = "54.243.21.97"
+MQTT_HOST = "ec2-54-243-21-97.compute-1.amazonaws.com"
 
 # Puerto del bróker MQTT
 MQTT_PORT = 8082
@@ -171,7 +171,7 @@ MQTT_PASSWORD_PUB = "admin2"
 
 # Tópico a suscribir. "+/+/+/+/out" se suscribe únicamente a los
 # tópicos con forma <país>/<estado>/<ciudad>/<usuario>/out.
-TOPIC = "colombia/cundinamarca/bogota/admin/out"
+TOPIC = "+/+/+/+/out"
 
 # Opción para habilitar la transmisión de mensajes segura
 MQTT_USE_TLS = False
