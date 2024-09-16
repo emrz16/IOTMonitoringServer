@@ -20,7 +20,7 @@ def analyze_data():
 
     data = Data.objects.filter(
         base_time__gte=datetime.now() - timedelta(hours=1))
-    aggregation = data.annotate(check_value=Avg('avg_value'), variance_value=Variance('values')) \
+    aggregation = data.annotate(check_value=Avg('avg_value')) \
         .select_related('station', 'measurement') \
         .select_related('station__user', 'station__location') \
         .select_related('station__location__city', 'station__location__state',
@@ -32,12 +32,25 @@ def analyze_data():
                 'station__location__city__name',
                 'station__location__state__name',
                 'station__location__country__name')
-    print(data)
-    print("----")
+
+    aggregation_2 = data.annotate(variance_value = Variance('values')) \
+        .select_related('station', 'measurement') \
+        .select_related('station__user', 'station__location') \
+        .select_related('station__location__city', 'station__location__state',
+                        'station__location__country') \
+        .values('variance_value', 'check_value', 'station__user__username',
+                'measurement__name',
+                'measurement__max_value',
+                'measurement__min_value',
+                'station__location__city__name',
+                'station__location__state__name',
+                'station__location__country__name')
     print(aggregation)
     print("----")
+    print(aggregation_2)
+    print("----")
     alerts = 0
-    variance_threshold  = 25
+    variance_threshold = 25
     for item in aggregation:
         alert = False
 
