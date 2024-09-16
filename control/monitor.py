@@ -33,7 +33,7 @@ def analyze_data():
                 'station__location__state__name',
                 'station__location__country__name')
 
-    aggregation_2 = data.annotate(variance_value = Variance('avg_value')) \
+    aggregation_2 = data.annotate(variance_value=Variance('values')) \
         .select_related('station', 'measurement') \
         .select_related('station__user', 'station__location') \
         .select_related('station__location__city', 'station__location__state',
@@ -46,8 +46,12 @@ def analyze_data():
                 'station__location__state__name',
                 'station__location__country__name')
     print(aggregation)
+    print(str(aggregation.query))
+
     print("----")
     print(aggregation_2)
+    print(str(aggregation_2.query))
+
     print("----")
     alerts = 0
     variance_threshold = 25
