@@ -162,15 +162,15 @@ MQTT_HOST = "ec2-54-243-21-97.compute-1.amazonaws.com"
 MQTT_PORT = 8082
 
 # Credenciales para el usuario suscriptor del bróker MQTT
-MQTT_USER = "admin"
-MQTT_PASSWORD = "admin"
+MQTT_USER = "user1"
+MQTT_PASSWORD = "123456"
 
 # Credenciales para el usuario publicador del bróker MQTT
-MQTT_USER_PUB = "admin2"
-MQTT_PASSWORD_PUB = "admin2"
+MQTT_USER_PUB = "user1"
+MQTT_PASSWORD_PUB = "123456"
 
 # Tópico a suscribir. "+/+/+/+/out" se suscribe únicamente a los
-# tópicos con forma <país>/<estado>/<ciudad>/<usuario>/out.
+# tópicos con forma <país>/<estado>/<ciudad>/<usuario>/out. colombia/cundinamarca/bogota/admin/out
 TOPIC = "+/+/+/+/out"
 
 # Opción para habilitar la transmisión de mensajes segura
