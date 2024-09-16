@@ -1,6 +1,6 @@
 from argparse import ArgumentError
 import ssl
-from django.db.models import Avg, StdDev
+from django.db.models import Avg, Variance
 from datetime import timedelta, datetime
 from receiver.models import Data, Measurement
 import paho.mqtt.client as mqtt
@@ -20,7 +20,7 @@ def analyze_data():
 
     data = Data.objects.filter(
         base_time__gte=datetime.now() - timedelta(hours=1))
-    aggregation = data.annotate(check_value=Avg('avg_value'), stddev_value=StdDev('avg_value')) \
+    aggregation = data.annotate(check_value=Avg('avg_value'), variance_value=Variance('avg_value')) \
         .select_related('station', 'measurement') \
         .select_related('station__user', 'station__location') \
         .select_related('station__location__city', 'station__location__state',
@@ -33,7 +33,7 @@ def analyze_data():
                 'station__location__state__name',
                 'station__location__country__name')
     alerts = 0
-    stddev_threshold = 5
+    variance_threshold  = 25
     for item in aggregation:
         alert = False
 
@@ -49,9 +49,9 @@ def analyze_data():
         if item["check_value"] > max_value or item["check_value"] < min_value:
             message = "ALERT {} {} {}".format(variable, min_value, max_value)
             alert = True
-        elif item["stddev_value"] > stddev_threshold:
+        elif item["variance_value"] > variance_threshold:
             alert = True
-            message = "ALERT {} {}".format(variable, item["stddev_value"])
+            message = "ALERT {} {}".format(variable, item["variance_value"])
         if alert:
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
