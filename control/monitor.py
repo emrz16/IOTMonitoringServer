@@ -32,6 +32,10 @@ def analyze_data():
                 'station__location__city__name',
                 'station__location__state__name',
                 'station__location__country__name')
+    print(data)
+    print("----")
+    print(aggregation)
+    print("----")
     alerts = 0
     variance_threshold  = 25
     for item in aggregation:
