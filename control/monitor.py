@@ -35,15 +35,6 @@ def analyze_data():
     data2 = Data.objects.filter(
         base_time__gte=datetime.now() - timedelta(hours=4), measurement_id = 2)
     aggregation_2 = data2.aggregate(variance_value=Variance('avg_value'))
-    print(aggregation)
-    print(str(aggregation.query))
-
-    print("----")
-    print(data2)
-    print(aggregation_2)
-    print(str(aggregation_2.query))
-
-    print("----")
     alerts = 0
     variance_threshold = 25
     for item in aggregation:
@@ -61,17 +52,22 @@ def analyze_data():
         if item["check_value"] > max_value or item["check_value"] < min_value:
             message = "ALERT {} {} {}".format(variable, min_value, max_value)
             alert = True
-        elif item["variance_value"] > variance_threshold:
-            alert = True
-            message = "ALERT {} {}".format(variable, item["variance_value"])
+
         if alert:
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
             client.publish(topic, message)
             alerts += 1
+        print(len(aggregation), "dispositivos revisados")
 
-    print(len(aggregation), "dispositivos revisados")
+    if aggregation_2["variance_value"]> 10:
+            topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
+            message = "ALERT {} {}".format("temperatura", aggregation_2["variance_value"])
+            client.publish(topic, message)
+            alerts += 1
+            print("alerta temperatura enviada")
     print(alerts, "alertas enviadas")
+
 
 
 def on_connect(client, userdata, flags, rc):
