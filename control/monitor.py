@@ -33,7 +33,7 @@ def analyze_data():
                 'station__location__state__name',
                 'station__location__country__name')
 
-    aggregation_2 = data.annotate(variance_value=Variance('avg_value')) \
+    aggregation_2 = data.aggregate(variance_value=Variance('avg_value')) \
         .select_related('station', 'measurement') \
         .select_related('station__user', 'station__location') \
         .select_related('station__location__city', 'station__location__state',
