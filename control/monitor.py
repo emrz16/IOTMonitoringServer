@@ -50,7 +50,7 @@ def analyze_data():
         user = item['station__user__username']
 
         if item["check_value"] > max_value or item["check_value"] < min_value:
-            message = "ALERT {} {} {}".format(variable, min_value, max_value)
+                message = "ALERT {} {} {}".format(variable, min_value, max_value)
             alert = True
 
         if alert:
