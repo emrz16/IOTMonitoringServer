@@ -32,19 +32,9 @@ def analyze_data():
                 'station__location__city__name',
                 'station__location__state__name',
                 'station__location__country__name')
-
-    aggregation_2 = data.aggregate(variance_value=Variance('avg_value')) \
-        .select_related('station', 'measurement') \
-        .select_related('station__user', 'station__location') \
-        .select_related('station__location__city', 'station__location__state',
-                        'station__location__country') \
-        .values('variance_value', 'station__user__username',
-                'measurement__name',
-                'measurement__max_value',
-                'measurement__min_value',
-                'station__location__city__name',
-                'station__location__state__name',
-                'station__location__country__name')
+    data2 = Data.objects.filter(
+        base_time__gte=datetime.now() - timedelta(hours=1), measurement_id = 2)
+    aggregation_2 = data2.aggregate(variance_value=Variance('avg_value'))
     print(aggregation)
     print(str(aggregation.query))
 
