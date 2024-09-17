@@ -33,12 +33,13 @@ def analyze_data():
                 'station__location__state__name',
                 'station__location__country__name')
     data2 = Data.objects.filter(
-        base_time__gte=datetime.now() - timedelta(hours=1), measurement_id = 2)
+        base_time__gte=datetime.now() - timedelta(hours=4), measurement_id = 2)
     aggregation_2 = data2.aggregate(variance_value=Variance('avg_value'))
     print(aggregation)
     print(str(aggregation.query))
 
     print("----")
+    print(data2)
     print(aggregation_2)
     print(str(aggregation_2.query))
 
